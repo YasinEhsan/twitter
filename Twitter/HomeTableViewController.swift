@@ -9,18 +9,30 @@
 import UIKit
 
 class HomeTableViewController: UITableViewController {
+    
+    var tweetArray = [NSDictionary]()
+    var numberOfTweet: Int!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    
+    func loadTweet(){
+        
+        let myUrl = "https://api.twitter.com/1.1/statuses/home_timeline.json"
+        let myParams = ["count": 10]
+        
+        TwitterAPICaller.client?.getDictionariesRequest(url: myUrl, parameters: myParams, success: { (tweets: [NSDictionary]) in
+            self.tweetArray.removeAll()
+            for tweet in tweets{
+                self.tweetArray.append(tweet)
+            }
+        }, failure: { (Error) in
+            print("cud not get dem tweets")
+        })
     }
 
-    // MARK: - Table view data source
+ 
 
     @IBAction func onLogout(_ sender: Any) {
         TwitterAPICaller.client?.logout()
