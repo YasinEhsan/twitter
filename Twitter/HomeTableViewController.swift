@@ -15,6 +15,7 @@ class HomeTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadTweet()
     }
     
     func loadTweet(){
@@ -27,6 +28,9 @@ class HomeTableViewController: UITableViewController {
             for tweet in tweets{
                 self.tweetArray.append(tweet)
             }
+            
+            self.tableView.reloadData()
+            
         }, failure: { (Error) in
             print("cud not get dem tweets")
         })
@@ -43,9 +47,15 @@ class HomeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "tweetCell", for: indexPath) as! TweetCellTableViewCell
         
+        let user = tweetArray[indexPath.row]["user"] as! NSDictionary
         
-        cell.userNameLabel.text = "some namee"
-        cell.tweetContent.text = "ldhfgiqur content"
+        cell.userNameLabel.text = user["name"] as! String
+        cell.tweetContent.text = tweetArray[indexPath.row]["text"] as! String
+        
+        let imageURL = URL(string: (user["profile_image_url_https"] as! String)!)
+        
+        
+
         return cell
     }
     
